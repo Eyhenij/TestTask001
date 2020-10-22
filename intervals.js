@@ -1,113 +1,181 @@
+
 // Вводим начальные данные
-let arrInputData = ["m2", "Fb", "asc"];
+let arrInputData = ["P5", "Ab", "asc"];
 
 // ============================================================================
+// Для удобства введём для значений нот в градусах и полутонах переменный "х" и "у"
+// Переменная "x" - будет хранить значения градусов нот
+// Переменная "y" - будет хранить значения полутоной нот
+// Для стартовой ноты это будут переменные               "x1" и "y1"
+// Для заданного интервала смещения это будут переменные "x2" и "y2"
+// Для найденной промежуточной ноты это будут переменные "x3" и "y3"
+// Для итоговой искомой ноты это будут переменные        "x4" и "y4"
 // Задаём интервал (формат: id3 - качество интервалов (градусы), id4 - количество интервалов (полутона))
 let arrIntervals = [
-  {id3: 2, id4: 1 , name: "m2"},
-  {id3: 2, id4: 2 , name: "M2"},
-  {id3: 3, id4: 3 , name: "m3"},
-  {id3: 3, id4: 4 , name: "M3"},
-  {id3: 4, id4: 5 , name: "P4"},
-  {id3: 5, id4: 7 , name: "P5"},
-  {id3: 6, id4: 8 , name: "m6"},
-  {id3: 6, id4: 9 , name: "M6"},
-  {id3: 7, id4: 10, name: "m7"},
-  {id3: 7, id4: 11, name: "M7"},
-  {id3: 8, id4: 12, name: "P8"},
+  {x: 2, y: 1 , name: "m2"},
+  {x: 2, y: 2 , name: "M2"},
+  {x: 3, y: 3 , name: "m3"},
+  {x: 3, y: 4 , name: "M3"},
+  {x: 4, y: 5 , name: "P4"},
+  {x: 5, y: 7 , name: "P5"},
+  {x: 6, y: 8 , name: "m6"},
+  {x: 6, y: 9 , name: "M6"},
+  {x: 7, y: 10, name: "m7"},
+  {x: 7, y: 11, name: "M7"},
+  {x: 8, y: 12, name: "P8"},
 ];
 
 let i1 = arrIntervals.find(item => item.name == arrInputData[0]);
-let inputInterval1 = i1.id3; // Количество градусов (id3) исходного интервала
+let x1 = i1.x; // Количество градусов (id3) исходного интервала
 
 let i2 = arrIntervals.find(item => item.name == arrInputData[0]);
-let inputInterval2 = i2.id4; // Количество полутонов (id4) исходного интервала
-alert(`Заданный интервал ${arrInputData[0]} в градусах  = ${inputInterval1}. 
-Заданный интервал ${arrInputData[0]} в полутонах  = ${inputInterval2}`);
+let y1 = i2.y; // Количество полутонов (id4) исходного интервала
+alert(`Заданный интервал ${arrInputData[0]} в градусах  = ${x1}. 
+Заданный интервал ${arrInputData[0]} в полутонах  = ${y1}`);
 
 // ============================================================================
 // Задаём массив нот (id - качество интервалов (градусы))
 let arrNotes = [
-  {id: 1, id2: 12, name: "Cb"},
-  {id: 1, id2: 1 , name: "C" },
-  {id: 1, id2: 2 , name: "C#"},
-  {id: 2, id2: 2 , name: "Db"},
-  {id: 2, id2: 3 , name: "D" },
-  {id: 2, id2: 4 , name: "D#"},
-  {id: 3, id2: 4 , name: "Eb"},
-  {id: 3, id2: 5 , name: "E" },
-  {id: 3, id2: 6 , name: "E#"},
-  {id: 4, id2: 5 , name: "Fb"},
-  {id: 4, id2: 6 , name: "F" },
-  {id: 4, id2: 7 , name: "F#"},
-  {id: 5, id2: 7 , name: "Gb"},
-  {id: 5, id2: 8 , name: "G" },
-  {id: 5, id2: 9 , name: "G#"},
-  {id: 6, id2: 9 , name: "Ab"},
-  {id: 6, id2: 10, name: "A" },
-  {id: 6, id2: 11, name: "A#"},
-  {id: 7, id2: 11, name: "Bb"},
-  {id: 7, id2: 12, name: "B" },
-  {id: 7, id2: 1 , name: "B#"},
+  {x: 1, y: 12, name: "Cb"},
+  {x: 1, y: 1 , name: "C" },
+  {x: 1, y: 2 , name: "C#"},
+  {x: 2, y: 2 , name: "Db"},
+  {x: 2, y: 3 , name: "D" },
+  {x: 2, y: 4 , name: "D#"},
+  {x: 3, y: 4 , name: "Eb"},
+  {x: 3, y: 5 , name: "E" },
+  {x: 3, y: 6 , name: "E#"},
+  {x: 4, y: 5 , name: "Fb"},
+  {x: 4, y: 6 , name: "F" },
+  {x: 4, y: 7 , name: "F#"},
+  {x: 5, y: 7 , name: "Gb"},
+  {x: 5, y: 8 , name: "G" },
+  {x: 5, y: 9 , name: "G#"},
+  {x: 6, y: 9 , name: "Ab"},
+  {x: 6, y: 10, name: "A" },
+  {x: 6, y: 11, name: "A#"},
+  {x: 7, y: 11, name: "Bb"},
+  {x: 7, y: 12, name: "B" },
+  {x: 7, y: 1 , name: "B#"},
 ];
 
 // Находим позицию стартовой ноты в градусах и полутонах
 let p = arrNotes.find(item => item.name == arrInputData[1]);
-let startPosition = p.id;
+let x2 = p.x;
 let p2 = arrNotes.find(item => item.name == arrInputData[1]);
-let startPosition2 = p2.id2;
+let y2 = p2.y;
 alert(`Стартовая нота : ${arrInputData[1]}.
-Стартовая позиция в градусах = ${startPosition}.
-стартовая позиция в полутонах = ${startPosition2}`);
+Стартовая позиция в градусах = ${x2}.
+стартовая позиция в полутонах = ${y2}`);
 
 // ============================================================================
-// Сумма позиций стартовой ноты и исходного интервала (в градусах)
-let n = startPosition + inputInterval1 - 1;
-let findedNotePosition;
+// Находим ступень промежуточной ноты "x3" (в градусах). Для этого складываем градусы исходной ноты и интервала.
+let n = x1 + x2 - 1;
+let x3;
 if (n>7) {
-  findedNotePosition = n-7
+  x3 = n-7;
 }
-else findedNotePosition = n;
+else x3 = n;
 
 // ============================================================================
-// Находим ноту по исходной позиции (в градусах)
+// Находим название промежуточной ноты по исходной позиции (в градусах)
 let arrNotes2 = [
-  {id: 1 , id1: 1, name: "C"},
-  {id: 3 , id1: 2, name: "D"},
-  {id: 5 , id1: 3, name: "E"},
-  {id: 6 , id1: 4, name: "F"},
-  {id: 8 , id1: 5, name: "G"},
-  {id: 10, id1: 6, name: "A"},
-  {id: 12, id1: 7, name: "B"},
+  {y: 1 , x: 1, name: "C"},
+  {y: 3 , x: 2, name: "D"},
+  {y: 5 , x: 3, name: "E"},
+  {y: 6 , x: 4, name: "F"},
+  {y: 8 , x: 5, name: "G"},
+  {y: 10, x: 6, name: "A"},
+  {y: 12, x: 7, name: "B"},
 ];
-let findedNote = arrNotes2.find(item => item.id1 == findedNotePosition);
+let findedNote = arrNotes2.find(item => item.x == x3);
 let findedNoteName = findedNote.name 
 
-// Находим позицию новой ноты в полутонах
+// Находим позицию промежуточной ноты в полутонах
 let findedNote2 = arrNotes.find(item => item.name == findedNoteName);
-let findedNotePosition2 = findedNote2.id2;
+let y3 = findedNote2.y;
 alert(`Найденная нота : ${findedNoteName}.
-Позиция в градусах = ${findedNotePosition}
-Позиция в полутонах = ${findedNotePosition2}`);
+Позиция в градусах = ${x3}
+Позиция в полутонах = ${y3}`);
 
-// Находим разницу в позициях между стартовой нотой и найденной нотой (в полутонах)
-let n2 = startPosition2 - findedNotePosition2;
+// Находим насколько нам нужно сместить положение промежуточной ноты по "y" (в полутонах)
+let n2 = y1 - 12 + y2 - y3;
+let y4;
+
+alert (n2);
+
+if (n2 < -12) {y4 = n2 + 12}
+else if (n2 <= 0) {y4 = n2}
+else if (n2 > 0) {y4 = n2}
+else if (n2 > 12) {y4 = n2 - 12;}
+  // alert(`Нам нужно подвинуть вниз (в сторону бемоль) найденную ноту на ${Math.abs(y4)} полутон(а)`);
+  // alert(`Нам нужно подвинуть вверх (в сторону диез) найденную ноту на ${y4} полутон(а)`);
+
+// ============================================================================
+// Называем правильную ноту
+let arrNotes3 = [
+  {name1: "Cbb", name2: "Cb", name3: "C", name4: "C#", name5: "C##"},
+  {name1: "Dbb", name2: "Db", name3: "D", name4: "D#", name5: "D##"},
+  {name1: "Ebb", name2: "Eb", name3: "E", name4: "E#", name5: "E##"},
+  {name1: "Fbb", name2: "Fb", name3: "F", name4: "F#", name5: "F##"},
+  {name1: "Gbb", name2: "Gb", name3: "G", name4: "G#", name5: "G##"},
+  {name1: "Abb", name2: "Ab", name3: "A", name4: "A#", name5: "A##"},
+  {name1: "Bbb", name2: "Bb", name3: "B", name4: "B#", name5: "B##"},
+];
+
+let findedNote3 = arrNotes3.find(item => item.name3 == findedNoteName);
+let wrightNote;
+
+switch (y4) {
+  case 1: wrightNote = findedNote3.name4;
+    break;
+  case 2: wrightNote = findedNote3.name5;
+    break;
+  case -1: wrightNote = findedNote3.name2;
+    break;
+  case -2: wrightNote = findedNote3.name1;
+    break;
+  default: alert ("Что-то в моей программе пошло не так...");
+}
+
+alert(`Конечная нота : ${wrightNote}`);
+
+
+/*
+if (y4 = 2) {
+      let wrightNote = findedNote3.name5;
+    }
+      else {
+        if (y4 = -1) {
+          let wrightNote = findedNote3.name2;
+        }
+          else (y4 = -2) {
+          let wrightNote = findedNote3.name1;
+          }
+      }
+*/
+
+/*
+let arrNotes2 = [
+  {id: 1 , id1: 1, id2: 0, name: "C" ,  name: "B#" ,  name: "Dbb"},
+  {id: 2 , id1: 1, id2: 1, name: "C#",  name: "B##",  name: "Db" },
+  {id: 3 , id1: 2, id2: 0, name: "D" ,  name: "C##",  name: "Ebb"},
+  {id: 4 , id1: 2, id2: 1, name: "D#",  name: "Eb" ,  name: "Fbb"},
+  {id: 5 , id1: 3, id2: 0, name: "E" ,  name: "D##",  name: "Fb" },
+  {id: 6 , id1: 4, id2: 0, name: "F" ,  name: "E#" ,  name: "Gbb"},
+  {id: 7 , id1: 4, id2: 1, name: "F#",  name: "E##",  name: "Gb" },
+  {id: 8 , id1: 5, id2: 0, name: "G" ,  name: "F##",  name: "Abb"},
+  {id: 9 , id1: 5, id2: 1, name: "G#",  name: "Ab"               },
+  {id: 10, id1: 6, id2: 0, name: "A" ,  name: "G##",  name: "Bbb"},
+  {id: 11, id1: 6, id2: 1, name: "A#",  name: "Bb" ,  name: "Cbb"},
+  {id: 12, id1: 7, id2: 0, name: "B" ,  name: "A##",  name: "Cb" },
+];
+*/
+
+/*
 let k2
 if (n2<0) {
   k2 = n2 + 12;
 }
 else k2 = n2;
-alert(k2);
-
-// Находим разницу в позициях между стартовой нотой и найденной нотой (в полутонах)
-let n3 = inputInterval2 - k2;
-alert(`Нам нужно подвинуть найденную ноту на ${n3} полутон(а)`);
-
-// ============================================================================
-// Двигаем найденную ноту
-let findedNotePosition3 = findedNotePosition2 + n3
-
-// Ищем конечную ноту в полном массиве нот
-let findedNote3 = arrNotes.find(item => item.id2 == findedNotePosition3);
-let wrightNote = findedNote3.name;
-alert(`Конечная нота : ${wrightNote}`);
+*/
